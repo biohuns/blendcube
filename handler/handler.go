@@ -64,37 +64,38 @@ func generateCube(w http.ResponseWriter, r *http.Request) {
 	var (
 		ctx       = r.Context()
 		query     = r.URL.Query()
-		format    string
 		algorithm []string
+		isBinary  bool
 		isUnlit   bool
 	)
 
-	if f, ok := ctx.Value(middleware.URLFormatCtxKey).(string); ok {
-		if f != glTF && f != glb {
+	format1, ok := ctx.Value(middleware.URLFormatCtxKey).(string)
+	if ok {
+		if format1 != glTF && format1 != glb {
 			errorResponse{
 				StatusCode: http.StatusBadRequest,
 				Message:    "the following formats are supported: gltf, glb",
 			}.Write(w)
 			return
 		}
-		format = f
+		isBinary = format1 == glb
 	}
-	if f := query.Get("fmt"); f != "" {
-		if format != "" {
+	if format2 := query.Get("fmt"); format2 != "" {
+		if format1 != "" {
 			errorResponse{
 				StatusCode: http.StatusBadRequest,
 				Message:    "specify either extension or format",
 			}.Write(w)
 			return
 		}
-		if f != glTF && f != glb {
+		if format2 != glTF && format2 != glb {
 			errorResponse{
 				StatusCode: http.StatusBadRequest,
 				Message:    "the following formats are supported: gltf, glb",
 			}.Write(w)
 			return
 		}
-		format = f
+		isBinary = format2 == glb
 	}
 
 	if alg := query.Get("alg"); alg != "" {
@@ -128,9 +129,15 @@ func generateCube(w http.ResponseWriter, r *http.Request) {
 		isUnlit = isUnlitStr == "true"
 	}
 
-	body, err := cube.Generate(algorithm, format == glb, isUnlit)
+	body, err := cube.Generate(algorithm, isBinary, isUnlit)
 	if err != nil {
 		panic(err)
+	}
+
+	if isBinary {
+		w.Header().Set("Content-Type", "model/gltf-binary")
+	} else {
+		w.Header().Set("Content-Type", "model/gltf+json")
 	}
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(body)
