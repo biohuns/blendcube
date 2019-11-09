@@ -30,15 +30,16 @@ type (
 )
 
 var (
+	// Shared 設定保持インスタンス
 	Shared *Config
 )
 
-// GetPort
+// GetPort ポート番号を返す
 func (c *Config) GetPort() string {
 	return ":" + strconv.Itoa(c.Server.Port)
 }
 
-// Configure
+// Configure 設定ファイルを読み取る
 func Configure() error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("toml")
