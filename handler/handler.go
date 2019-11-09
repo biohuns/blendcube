@@ -41,6 +41,7 @@ func (er errorResponse) Write(w http.ResponseWriter) {
 	_, _ = w.Write(body)
 }
 
+// New ルーターを生成する
 func New() http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
