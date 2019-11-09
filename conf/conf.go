@@ -14,17 +14,17 @@ import (
 type (
 	Config struct {
 		Server struct {
-			Port    int           `json:"port"`
-			Timeout time.Duration `json:"timeout"`
-		} `json:"server"`
+			Port    int           `toml:"port"`
+			Timeout time.Duration `toml:"timeout"`
+		} `toml:"server"`
 		Log struct {
-			StdOutput  bool   `json:"std_output"`
-			FileOutput bool   `json:"file_output"`
-			FilePath   string `json:"file_path"`
-			NoColor    bool   `json:"no_color"`
-		} `json:"log"`
+			StdOutput  bool   `toml:"std_output"`
+			FileOutput bool   `toml:"file_output"`
+			FilePath   string `toml:"file_path"`
+			NoColor    bool   `toml:"no_color"`
+		} `toml:"log"`
 		Model struct {
-			FilePath string `json:"file_path"`
+			FilePath string `toml:"file_path"`
 		}
 	}
 )

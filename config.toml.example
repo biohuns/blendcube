@@ -1,3 +1,11 @@
 [server]
 port = 8888
 timeout = 30
+
+[log]
+std_output = true
+file_output = false
+file_path = ""
+
+[model]
+file_path = "./cube.gltf"
