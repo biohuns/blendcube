@@ -23,6 +23,9 @@ type (
 			FilePath   string `json:"file_path"`
 			NoColor    bool   `json:"no_color"`
 		} `json:"log"`
+		Model struct {
+			FilePath string `json:"file_path"`
+		}
 	}
 )
 
