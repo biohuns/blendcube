@@ -50,18 +50,6 @@ func New() http.Handler {
 	r.Use(middleware.URLFormat)
 	r.Use(middleware.Timeout(conf.Shared.Server.Timeout * time.Second))
 
-	//corsOption := cors.New(cors.Options{
-	//	// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
-	//	AllowedOrigins: []string{"*"},
-	//	// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
-	//	AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	//	AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-	//	ExposedHeaders:   []string{"Link"},
-	//	AllowCredentials: true,
-	//	MaxAge:           300, // Maximum value not ignored by any of major browsers
-	//})
-	//r.Use(corsOption.Handler)
-
 	r.Get("/status", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
