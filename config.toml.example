@@ -3,9 +3,9 @@ port = 8888
 timeout = 30
 
 [log]
-std_output = true
-file_output = false
-file_path = ""
+stdOutput = true
+fileOutput = false
+filePath = ""
 
 [model]
-file_path = "./cube.gltf"
+filePath = "./cube.gltf"

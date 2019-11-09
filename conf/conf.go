@@ -14,17 +14,17 @@ import (
 type (
 	Config struct {
 		Server struct {
-			Port    int           `toml:"port"`
-			Timeout time.Duration `toml:"timeout"`
-		} `toml:"server"`
+			Port    int
+			Timeout time.Duration
+		}
 		Log struct {
-			StdOutput  bool   `toml:"std_output"`
-			FileOutput bool   `toml:"file_output"`
-			FilePath   string `toml:"file_path"`
-			NoColor    bool   `toml:"no_color"`
-		} `toml:"log"`
+			StdOutput  bool
+			FileOutput bool
+			FilePath   string
+			NoColor    bool
+		}
 		Model struct {
-			FilePath string `toml:"file_path"`
+			FilePath string
 		}
 	}
 )
