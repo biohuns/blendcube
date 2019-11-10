@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- Import the component -->
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Rubik&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        font-family: "Rubik", sans-serif;
+        color: #222;
+      }
+      .header {
+        text-align: center;
+        margin: 10rem 0 3rem;
+      }
+      .header p {
+        font-size: 2.5rem;
+      }
+      model-viewer {
+        height: 25rem;
+        width: 100%;
+      }
+      .parameters {
+        margin-top: 5rem;
+      }
+      .parameters table {
+        width: 100%;
+      }
+      .code-block {
+        background-color: #eee;
+      }
+    </style>
+    <title>BlendCube</title>
+  </head>
+  <body>
+    <div class="container">
+      <section class="header">
+        <h2 class="title">BlendCube</h2>
+        <p>
+          Simple API Server for<br />Generating Rubik's cube 3D Model from URL
+        </p>
+        <a
+          href="https://github.com/biohuns/blendcube"
+          class="button"
+          target="_blank"
+          >SOURCE CODE</a
+        >
+      </section>
+      <div class="row">
+        <div class="one-third column">
+          <model-viewer
+            src="https://blend.cubemeter.app/cube.gltf?is_unlit=true"
+            auto-rotate
+            camera-controls
+            camera-orbit="45deg 60deg 105%"
+            background-color="#ffffff"
+            interaction-prompt="none"
+          ></model-viewer>
+        </div>
+        <div class="one-third column">
+          <model-viewer
+            src="https://blend.cubemeter.app/cube.gltf?alg=U2%20D2%20F2%20B2%20L2%20R2"
+            auto-rotate
+            camera-controls
+            background-color="#ffffff"
+            interaction-prompt="none"
+          ></model-viewer>
+        </div>
+        <div class="one-third column">
+          <model-viewer
+            src="https://blend.cubemeter.app/cube.gltf?alg=R2%20D2%20U2%20B2%20U2%20R%20F2%20L%27%20B2%20D2%20L%20B%27%20D%27%20B%20F%27%20U%27%20B2%20R%20U%20R2%20B2"
+            auto-rotate
+            camera-controls
+            camera-orbit="45deg 120deg 105%"
+            background-color="#ffffff"
+            interaction-prompt="none"
+          ></model-viewer>
+        </div>
+      </div>
+      <div class="parameters">
+        <h3>Parameters</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Description</th>
+              <th>Value Range</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>.</th>
+              <td>extension</td>
+              <td>.gltf | .glb</td>
+              <td>
+                e.g. <span class="code-block">/cube.gltf?alg="U2 F2 R2"</span>
+              </td>
+            </tr>
+            <tr>
+              <th>fmt</th>
+              <td>format</td>
+              <td>gltf | glb</td>
+              <td>If you specify extension, don't specify format.</td>
+            </tr>
+            <tr>
+              <th>alg</th>
+              <td>algorithm to apply</td>
+              <td>[UDFBLR'2 ]*</td>
+            </tr>
+            <tr>
+              <th>is_unlit</th>
+              <td>unlit model flag</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
