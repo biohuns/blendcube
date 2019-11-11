@@ -196,11 +196,11 @@ func Generate(
 	)
 
 	if isBinary {
-		doc = *document
-		def = definition
-	} else {
 		doc = *binaryDocument
 		def = binaryDefinition
+	} else {
+		doc = *document
+		def = definition
 	}
 
 	if isUnlit {
