@@ -69,33 +69,16 @@ func generateCube(w http.ResponseWriter, r *http.Request) {
 		isUnlit   bool
 	)
 
-	format1, ok := ctx.Value(middleware.URLFormatCtxKey).(string)
+	format, ok := ctx.Value(middleware.URLFormatCtxKey).(string)
 	if ok {
-		if format1 != glTF && format1 != glb {
+		if format != glTF && format != glb {
 			errorResponse{
 				StatusCode: http.StatusBadRequest,
-				Message:    "the following formats are supported: gltf, glb",
+				Message:    "the following extension are supported: .gltf, .glb",
 			}.Write(w)
 			return
 		}
-		isBinary = format1 == glb
-	}
-	if format2 := query.Get("fmt"); format2 != "" {
-		if format1 != "" {
-			errorResponse{
-				StatusCode: http.StatusBadRequest,
-				Message:    "specify either extension or format",
-			}.Write(w)
-			return
-		}
-		if format2 != glTF && format2 != glb {
-			errorResponse{
-				StatusCode: http.StatusBadRequest,
-				Message:    "the following formats are supported: gltf, glb",
-			}.Write(w)
-			return
-		}
-		isBinary = format2 == glb
+		isBinary = format == glb
 	}
 
 	if alg := query.Get("alg"); alg != "" {
