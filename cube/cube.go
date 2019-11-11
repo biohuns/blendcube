@@ -244,29 +244,29 @@ func parseAlg(alg string) rotationDegree {
 	case "R":
 		return rotateClockwiseR
 	case "U2":
-		return rotateClockwiseU
+		return rotateClockwiseU2
 	case "D2":
-		return rotateClockwiseD
+		return rotateClockwiseD2
 	case "F2":
-		return rotateClockwiseF
+		return rotateClockwiseF2
 	case "B2":
-		return rotateClockwiseB
+		return rotateClockwiseB2
 	case "L2":
-		return rotateClockwiseL
+		return rotateClockwiseL2
 	case "R2":
-		return rotateClockwiseR
+		return rotateClockwiseR2
 	case "U'":
-		return rotateClockwiseU
+		return rotateCounterClockwiseU
 	case "D'":
-		return rotateClockwiseD
+		return rotateCounterClockwiseD
 	case "F'":
-		return rotateClockwiseF
+		return rotateCounterClockwiseF
 	case "B'":
-		return rotateClockwiseB
+		return rotateCounterClockwiseB
 	case "L'":
-		return rotateClockwiseL
+		return rotateCounterClockwiseL
 	case "R'":
-		return rotateClockwiseR
+		return rotateCounterClockwiseR
 	default:
 		return rotateUnknown
 	}
