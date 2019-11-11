@@ -1,3 +1,5 @@
 blendcube
 blendcube.exe
 config.toml
+*.blend1
+*.blend2
