@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"flag"
 	"io"
 	"log"
 	"os"
@@ -30,20 +31,23 @@ type (
 )
 
 var (
-	// Shared 設定保持インスタンス
+	// Shared holds config instance
 	Shared *Config
+	conf   = flag.String("conf", "./config.toml", "config file path")
 )
 
-// GetPort ポート番号を返す
+// GetPort return port string
 func (c *Config) GetPort() string {
 	return ":" + strconv.Itoa(c.Server.Port)
 }
 
-// Configure 設定ファイルを読み取る
+// Configure parse config file and environment variable
 func Configure() error {
-	viper.SetConfigName("config")
+	flag.Parse()
+
+	viper.GetString("config_path")
 	viper.SetConfigType("toml")
-	viper.SetConfigFile("./config.toml")
+	viper.SetConfigFile(*conf)
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {

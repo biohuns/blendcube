@@ -9,7 +9,7 @@ build:
 .PHONY: build-win
 build-win:
 	@set GO111MODULE=on
-	@go build -o $(APP_NAME)
+	@go build -o $(APP_NAME).exe
 
 .PHONY: run
 run: build
@@ -17,7 +17,7 @@ run: build
 
 .PHONY: run-win
 run-win: build-win
-	@./$(APP_NAME)
+	@./$(APP_NAME).exe
 
 .PHONY: clean
 clean:
