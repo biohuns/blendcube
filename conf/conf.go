@@ -25,7 +25,8 @@ type (
 			NoColor    bool
 		}
 		Model struct {
-			FilePath string
+			FilePath       string
+			BinaryFilePath string
 		}
 	}
 )
