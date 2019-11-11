@@ -1,5 +1,7 @@
 # BlendCube
 
+Simple API Server for Generating Rubik's Cube 3D Model from URL
+
 ## Usage
 
 ```bash
