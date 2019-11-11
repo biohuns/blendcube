@@ -81,84 +81,103 @@ var (
 	quaternionF2      = quaternion.FromEuler(-degree180, 0, 0)
 	quaternionL2      = quaternion.FromEuler(0, 0, -degree180)
 
-	document   *gltf.Document
-	definition stateDefinition
+	document         *gltf.Document
+	binaryDocument   *gltf.Document
+	definition       stateDefinition
+	binaryDefinition stateDefinition
 )
 
 // Initialize initialize cube state
-func Initialize() error {
+func Initialize() (err error) {
 	gltf.RegisterExtension(unlit.ExtUnlit, unlit.New)
 
-	var err error
 	document, err = gltf.Open(conf.Shared.Model.FilePath)
 	if err != nil {
 		return err
 	}
 
-	if len(document.Nodes) != 26 {
-		return fmt.Errorf("insufficient number of nodes")
+	if definition, err = nodeToDefinition(document.Nodes); err != nil {
+		return err
+	}
+
+	binaryDocument, err = gltf.Open(conf.Shared.Model.BinaryFilePath)
+	if err != nil {
+		return err
+	}
+
+	if binaryDefinition, err = nodeToDefinition(document.Nodes); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func nodeToDefinition(nodes []gltf.Node) (stateDefinition, error) {
+	var def stateDefinition
+
+	if len(nodes) != 26 {
+		return def, fmt.Errorf("insufficient number of nodes")
 	}
 
 	for _, node := range document.Nodes {
 		switch node.Name {
 		case "01_UBL":
-			definition.UBL = node
+			def.UBL = node
 		case "02_UB":
-			definition.UB = node
+			def.UB = node
 		case "03_UBR":
-			definition.UBR = node
+			def.UBR = node
 		case "04_UL":
-			definition.UL = node
+			def.UL = node
 		case "05_U":
-			definition.U = node
+			def.U = node
 		case "06_UR":
-			definition.UR = node
+			def.UR = node
 		case "07_UFL":
-			definition.UFL = node
+			def.UFL = node
 		case "08_UF":
-			definition.UF = node
+			def.UF = node
 		case "09_UFR":
-			definition.UFR = node
+			def.UFR = node
 		case "10_BL":
-			definition.BL = node
+			def.BL = node
 		case "11_B":
-			definition.B = node
+			def.B = node
 		case "12_BR":
-			definition.BR = node
+			def.BR = node
 		case "13_L":
-			definition.L = node
+			def.L = node
 		case "14_R":
-			definition.R = node
+			def.R = node
 		case "15_FL":
-			definition.FL = node
+			def.FL = node
 		case "16_F":
-			definition.F = node
+			def.F = node
 		case "17_FR":
-			definition.FR = node
+			def.FR = node
 		case "18_DBL":
-			definition.DBL = node
+			def.DBL = node
 		case "19_DB":
-			definition.DB = node
+			def.DB = node
 		case "20_DBR":
-			definition.DBR = node
+			def.DBR = node
 		case "21_DL":
-			definition.DL = node
+			def.DL = node
 		case "22_D":
-			definition.D = node
+			def.D = node
 		case "23_DR":
-			definition.DR = node
+			def.DR = node
 		case "24_DFL":
-			definition.DFL = node
+			def.DFL = node
 		case "25_DF":
-			definition.DF = node
+			def.DF = node
 		case "26_DFR":
-			definition.DFR = node
+			def.DFR = node
 		default:
-			return fmt.Errorf("unexpected node name: %s", node.Name)
+			return def, fmt.Errorf("unexpected node name: %s", node.Name)
 		}
 	}
-
-	return nil
+	return def, nil
 }
 
 // Generate generate cube data
@@ -170,8 +189,19 @@ func Generate(
 	if document == nil {
 		return nil, fmt.Errorf("glTF document is not found")
 	}
-	doc := *document
-	def := definition
+
+	var (
+		doc gltf.Document
+		def stateDefinition
+	)
+
+	if isBinary {
+		doc = *document
+		def = definition
+	} else {
+		doc = *binaryDocument
+		def = binaryDefinition
+	}
 
 	if isUnlit {
 		doc.ExtensionsUsed = []string{unlit.ExtUnlit}
@@ -224,6 +254,7 @@ func Generate(
 	e := gltf.NewEncoder(buffer)
 	e.AsBinary = isBinary
 	if err := e.Encode(&doc); err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 	return buffer.Bytes(), nil
