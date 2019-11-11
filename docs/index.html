@@ -34,6 +34,9 @@
       .header p {
         font-size: 2.5rem;
       }
+      .footer {
+        text-align: center;
+      }
       model-viewer {
         height: 25rem;
         width: 100%;
@@ -41,8 +44,8 @@
       .parameters {
         margin-top: 5rem;
       }
-      .parameters table {
-        width: 100%;
+      .parameters .table {
+        overflow-x: scroll;
       }
       .code-block {
         background-color: #eee;
@@ -97,40 +100,45 @@
       </div>
       <div class="parameters">
         <h3>Parameters</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Variable</th>
-              <th>Description</th>
-              <th>Value Range</th>
-              <th>Comment</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>.</th>
-              <td>extension</td>
-              <td>.gltf | .glb</td>
-              <td>
-                e.g. <span class="code-block">/cube.gltf?alg=U2+F2+R2</span>
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <th>alg</th>
-              <td>algorithm to apply</td>
-              <td>[UDFBLR'2 ]*</td>
-              <td></td>
-            </tr>
-            <tr>
-              <th>is_unlit</th>
-              <td>unlit model flag</td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th>Variable</th>
+                <th>Description</th>
+                <th>Value Range</th>
+                <th>Comment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>.</th>
+                <td>extension</td>
+                <td>.gltf | .glb</td>
+                <td>
+                  e.g. <span class="code-block">/cube.gltf?alg=U2+F2+R2</span>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <th>alg</th>
+                <td>algorithm to apply</td>
+                <td>[UDFBLR'2 ]*</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th>is_unlit</th>
+                <td>unlit model flag</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <section class="footer">
+        <small>©2019 Shinobu Nishioka</small>
+      </section>
     </div>
   </body>
 </html>
