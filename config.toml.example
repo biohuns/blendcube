@@ -8,4 +8,4 @@ fileOutput = false
 filePath = ""
 
 [model]
-filePath = "./cube.gltf"
+filePath = "./cube.glb"
