@@ -9,18 +9,26 @@ import (
 )
 
 func main() {
-	if err := conf.Configure(); err != nil {
+	if err := start(); err != nil {
 		log.Fatalln(err)
 	}
+}
 
-	if err := cube.Initial(); err != nil {
-		log.Fatalln(err)
+func start() error {
+	if err := conf.Configure(); err != nil {
+		return err
+	}
+
+	if err := cube.Initialize(); err != nil {
+		return err
 	}
 
 	if err := http.ListenAndServe(
 		conf.Shared.GetPort(),
 		handler.New(),
 	); err != nil {
-		log.Fatalln(err)
+		return err
 	}
+
+	return nil
 }
