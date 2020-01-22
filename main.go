@@ -18,10 +18,12 @@ func start() error {
 	if err := conf.Configure(); err != nil {
 		return err
 	}
+	log.Println("server configure: success")
 
 	if err := cube.Initialize(); err != nil {
 		return err
 	}
+	log.Println("loading model: success")
 
 	if err := http.ListenAndServe(
 		conf.Shared.GetPort(),
