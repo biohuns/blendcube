@@ -3,8 +3,8 @@ port = 8888
 timeout = 30
 
 [log]
-stdOutput = true
-fileOutput = false
+# stdout or file
+output = "file"
 filePath = ""
 
 [model]

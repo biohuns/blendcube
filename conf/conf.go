@@ -1,8 +1,8 @@
 package conf
 
 import (
+	"errors"
 	"flag"
-	"io"
 	"log"
 	"os"
 	"strconv"
@@ -19,10 +19,8 @@ type (
 			Timeout time.Duration
 		}
 		Log struct {
-			StdOutput  bool
-			FileOutput bool
-			FilePath   string
-			NoColor    bool
+			Output   string
+			FilePath string
 		}
 		Model struct {
 			FilePath       string
@@ -67,13 +65,14 @@ func Configure() error {
 }
 
 func configureLogger() error {
-	var writer []io.Writer
-
-	if Shared.Log.StdOutput {
-		writer = append(writer, os.Stdout)
-	}
-	if Shared.Log.FileOutput {
-		Shared.Log.NoColor = true
+	switch Shared.Log.Output {
+	case "stdout":
+		middleware.DefaultLogger = middleware.RequestLogger(
+			&middleware.DefaultLogFormatter{
+				Logger: log.New(os.Stdout, "", log.LstdFlags),
+			},
+		)
+	case "file":
 		logFile, err := os.OpenFile(
 			Shared.Log.FilePath,
 			os.O_APPEND|os.O_CREATE|os.O_WRONLY,
@@ -82,18 +81,15 @@ func configureLogger() error {
 		if err != nil {
 			return err
 		}
-		writer = append(writer, logFile)
+		middleware.DefaultLogger = middleware.RequestLogger(
+			&middleware.DefaultLogFormatter{
+				Logger:  log.New(logFile, "", log.LstdFlags),
+				NoColor: true,
+			},
+		)
+	default:
+		return errors.New("output must be stdout or file")
 	}
-
-	middleware.DefaultLogger = middleware.RequestLogger(
-		&middleware.DefaultLogFormatter{
-			Logger: log.New(
-				io.MultiWriter(writer...),
-				"",
-				log.LstdFlags),
-			NoColor: Shared.Log.NoColor,
-		},
-	)
 
 	return nil
 }
