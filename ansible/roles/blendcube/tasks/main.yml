@@ -1,0 +1,44 @@
+---
+# file: roles/blendcube/tasks/main.yml
+
+- name: Make blendcube directory
+  file:
+    path: /etc/blendcube
+    state: directory
+    owner: centos
+    group: centos
+    mode: 0755
+  tags:
+    - blendcube
+
+- name: Configure blendcube nginx conf
+  template:
+    src: blendcube.conf.j2
+    dest: /etc/nginx/conf.d/blendcube.conf
+  notify: Restart Nginx
+  tags:
+    - blendcube
+
+- name: Configure blendcube conf
+  template:
+    src: config.toml.j2
+    dest: /etc/blendcube/config.toml
+  notify: Restart BlendCube
+  tags:
+    - blendcube
+
+- name: Configure blendcube service
+  template:
+    src: blendcube.service.j2
+    dest: /etc/systemd/system/blendcube.service
+  tags:
+    - blendcube
+
+- name: Start blendcube
+  systemd:
+    name: blendcube
+    state: started
+    daemon_reload: yes
+    enabled: yes
+  tags:
+    - blendcube

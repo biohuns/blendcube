@@ -1,0 +1,13 @@
+---
+# file: site.yml
+
+- hosts: blendcube_api
+  become: yes
+  vars_files:
+    - vars/common.yml
+  roles:
+    - swap
+    - common
+    - nginx
+    - certbot
+    - blendcube

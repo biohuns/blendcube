@@ -1,0 +1,13 @@
+[Unit]
+Description = BlendCube
+
+[Service]
+Type = simple
+WorkingDirectory = /etc/blendcube
+ExecStart = /etc/blendcube/blendcube
+ExecStop = /bin/kill -HUP $MAINPID
+ExecReload = /bin/kill -HUP $MAINPID && /etc/blendcube/blendcube
+Restart = always
+
+[Install]
+WantedBy = multi-user.target
