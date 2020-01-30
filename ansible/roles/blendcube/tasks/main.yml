@@ -1,7 +1,7 @@
 ---
 # file: roles/blendcube/tasks/main.yml
 
-- name: Make blendcube directory
+- name: Make config directory
   file:
     path: /etc/blendcube
     state: directory
@@ -11,7 +11,7 @@
   tags:
     - blendcube
 
-- name: Configure blendcube nginx conf
+- name: Configure nginx conf
   template:
     src: blendcube.conf.j2
     dest: /etc/nginx/conf.d/blendcube.conf
@@ -19,7 +19,7 @@
   tags:
     - blendcube
 
-- name: Configure blendcube conf
+- name: Configure conf
   template:
     src: config.toml.j2
     dest: /etc/blendcube/config.toml
@@ -27,14 +27,24 @@
   tags:
     - blendcube
 
-- name: Configure blendcube service
+- name: Configure logrotate conf
+  template:
+    src: blendcube.logrotate.j2
+    dest: /etc/logrotate.d/blendcube
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - blendcube
+
+- name: Configure systemd service
   template:
     src: blendcube.service.j2
     dest: /etc/systemd/system/blendcube.service
   tags:
     - blendcube
 
-- name: Start blendcube
+- name: Start app
   systemd:
     name: blendcube
     state: started
