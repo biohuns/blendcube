@@ -4,7 +4,7 @@ timeout = 30
 
 [log]
 # stdout or file
-output = "file"
+output = "stdout"
 filePath = ""
 
 [model]
