@@ -19,6 +19,10 @@ run: build
 run-win: build-win
 	@./$(APP_NAME).exe
 
+.PHONY: mod-tidy
+mod-tidy:
+	GO111MODULE=on go mod tidy
+
 .PHONY: clean
 clean:
 	GO111MODULE=on go clean -x
