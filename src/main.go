@@ -1,7 +1,7 @@
 package main
 
 import (
-	"blendcube/conf"
+	"blendcube/config"
 	"blendcube/cube"
 	"blendcube/handler"
 	"log"
@@ -12,7 +12,7 @@ import (
 func main() {
 	exit := make(chan int)
 
-	if err := conf.Configure(exit); err != nil {
+	if err := config.Configure(exit); err != nil {
 		log.Println(err)
 		os.Exit(1)
 	}
@@ -25,7 +25,7 @@ func main() {
 	log.Println("loading model: success")
 
 	srv := &http.Server{
-		Addr:    conf.Shared.GetPort(),
+		Addr:    config.Shared.GetPort(),
 		Handler: handler.New(),
 	}
 

@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"blendcube/conf"
+	"blendcube/config"
 	"blendcube/cube"
 	"encoding/json"
 	"net/http"
@@ -49,7 +49,9 @@ func New() http.Handler {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.URLFormat)
-	r.Use(middleware.Timeout(conf.Shared.Server.Timeout * time.Second))
+	r.Use(middleware.Timeout(
+		config.Shared.Server.Timeout * time.Second,
+	))
 
 	r.Get("/status", func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusOK)

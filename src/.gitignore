@@ -1,5 +1,5 @@
 /blendcube
 /blendcube.exe
-config.toml
+/config.json
 *.blend1
 *.blend2

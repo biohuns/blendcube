@@ -1,7 +1,7 @@
 package cube
 
 import (
-	"blendcube/conf"
+	"blendcube/config"
 	"bytes"
 	"fmt"
 	"math"
@@ -91,7 +91,7 @@ var (
 func Initialize() (err error) {
 	gltf.RegisterExtension(unlit.ExtUnlit, unlit.New)
 
-	document, err = gltf.Open(conf.Shared.Model.FilePath)
+	document, err = gltf.Open(config.Shared.Model.FilePath)
 	if err != nil {
 		return err
 	}
@@ -100,7 +100,7 @@ func Initialize() (err error) {
 		return err
 	}
 
-	binaryDocument, err = gltf.Open(conf.Shared.Model.BinaryFilePath)
+	binaryDocument, err = gltf.Open(config.Shared.Model.BinaryFilePath)
 	if err != nil {
 		return err
 	}
