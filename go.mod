@@ -3,6 +3,7 @@ module blendcube
 go 1.13
 
 require (
+	github.com/Songmu/replaceablewriter v0.0.0-20190922161911-05c5f8e68073
 	github.com/go-chi/chi v4.0.2+incompatible
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/validator v9.30.0+incompatible // indirect

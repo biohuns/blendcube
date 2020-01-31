@@ -3,11 +3,15 @@ package conf
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 	"time"
 
+	"github.com/Songmu/replaceablewriter"
 	"github.com/go-chi/chi/middleware"
 	"github.com/spf13/viper"
 )
@@ -30,9 +34,12 @@ type (
 )
 
 var (
+	conf = flag.String("conf", "./config.toml", "config file path")
+
 	// Shared holds config instance
 	Shared *Config
-	conf   = flag.String("conf", "./config.toml", "config file path")
+	// LogFile holds log output file
+	LogFile *replaceablewriter.Writer
 )
 
 // GetPort return port string
@@ -41,7 +48,7 @@ func (c *Config) GetPort() string {
 }
 
 // Configure parse config file and environment variable
-func Configure() error {
+func Configure(exit chan int) error {
 	flag.Parse()
 
 	viper.GetString("config_path")
@@ -60,6 +67,7 @@ func Configure() error {
 	if err := configureLogger(); err != nil {
 		return err
 	}
+	configureReopenLogFile(exit)
 
 	return nil
 }
@@ -73,7 +81,7 @@ func configureLogger() error {
 			},
 		)
 	case "file":
-		logFile, err := os.OpenFile(
+		f, err := os.OpenFile(
 			Shared.Log.FilePath,
 			os.O_APPEND|os.O_CREATE|os.O_WRONLY,
 			0644,
@@ -81,9 +89,10 @@ func configureLogger() error {
 		if err != nil {
 			return err
 		}
+		LogFile = replaceablewriter.New(f)
 		middleware.DefaultLogger = middleware.RequestLogger(
 			&middleware.DefaultLogFormatter{
-				Logger:  log.New(logFile, "", log.LstdFlags),
+				Logger:  log.New(LogFile, "", log.LstdFlags),
 				NoColor: true,
 			},
 		)
@@ -91,5 +100,52 @@ func configureLogger() error {
 		return errors.New("output must be stdout or file")
 	}
 
+	return nil
+}
+
+func configureReopenLogFile(exit chan int) {
+	sig := make(chan os.Signal, 1)
+	signal.Notify(
+		sig,
+		syscall.SIGHUP,
+		syscall.SIGTERM,
+	)
+
+	go func() {
+		for {
+			s := <-sig
+			switch s {
+			case syscall.SIGHUP:
+				if err := reopenLogFile(); err != nil {
+					log.Printf("reopen log error: %s", err)
+					exit <- 1
+				}
+				log.Println("reopen log")
+			case syscall.SIGTERM:
+				log.Println("shutdown...")
+				exit <- 0
+				return
+			default:
+				log.Printf("receive unknown signal: %+v\n", s)
+				exit <- 1
+				return
+			}
+		}
+	}()
+}
+
+func reopenLogFile() (err error) {
+	if err := LogFile.Close(); err != nil {
+		return fmt.Errorf("logfile close error: %s", err)
+	}
+	f, err := os.OpenFile(
+		Shared.Log.FilePath,
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
+		0644,
+	)
+	if err != nil {
+		return fmt.Errorf("logfile open error: %s", err)
+	}
+	LogFile.Replace(f)
 	return nil
 }
