@@ -54,3 +54,11 @@
   when: not cert_test.stat.exists
   tags:
     - certbot
+
+- name: Set renew script to crontab
+  cron:
+    name: cerbot renew
+    special_time: monthly
+    job: /bin/certbot renew --post-hook "systemctl reload nginx"
+  tags:
+    - certbot

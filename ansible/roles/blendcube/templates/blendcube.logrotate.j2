@@ -1,5 +1,12 @@
 /var/log/blendcube.log {
+    nocreate
+    daily
+    rotate 28
+    missingok
+    notifempty
+    compress
     postrotate
         /bin/kill -HUP `/bin/pgrep blendcube 2> /dev/null` 2> /dev/null || true
     endscript
 }
+

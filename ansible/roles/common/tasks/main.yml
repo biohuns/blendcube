@@ -1,6 +1,12 @@
 ---
 # file: roles/common/tasks/main.yml
 
+- name: Set timezone to Asia/Tokyo
+  timezone:
+    name: Asia/Tokyo
+  tags:
+    - common
+
 - name: Upgrade all packages
   yum:
     name: "*"
