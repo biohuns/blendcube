@@ -21,8 +21,8 @@
 
 - name: Configure conf
   template:
-    src: config.toml.j2
-    dest: /etc/blendcube/config.toml
+    src: config.json.j2
+    dest: /etc/blendcube/config.json
   notify: Restart BlendCube
   tags:
     - blendcube
