@@ -1,12 +1,13 @@
 package main
 
 import (
-	"blendcube/config"
-	"blendcube/cube"
-	"blendcube/handler"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/biohuns/blendcube/config"
+	"github.com/biohuns/blendcube/cube"
+	"github.com/biohuns/blendcube/handler"
 )
 
 func main() {

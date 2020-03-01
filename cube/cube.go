@@ -1,10 +1,11 @@
 package cube
 
 import (
-	"blendcube/config"
 	"bytes"
 	"fmt"
 	"math"
+
+	"github.com/biohuns/blendcube/config"
 
 	"github.com/qmuntal/gltf"
 	"github.com/qmuntal/gltf/unlit"

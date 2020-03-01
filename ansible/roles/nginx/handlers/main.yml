@@ -1,9 +1,0 @@
----
-# file: roles/nginx/handlers/main.yml
-
-- name: Restart nginx
-  systemd:
-    name: nginx
-    state: restarted
-  tags:
-    - nginx

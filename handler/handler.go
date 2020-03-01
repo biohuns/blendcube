@@ -1,12 +1,13 @@
 package handler
 
 import (
-	"blendcube/config"
-	"blendcube/cube"
 	"encoding/json"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/biohuns/blendcube/config"
+	"github.com/biohuns/blendcube/cube"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"

@@ -1,6 +1,0 @@
-[blendcube_api]
-#blend.cubemeter.app
-13.231.207.34
-
-[all:vars]
-ansible_ssh_user=centos
