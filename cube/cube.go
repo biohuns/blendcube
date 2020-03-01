@@ -6,7 +6,6 @@ import (
 	"math"
 
 	"github.com/biohuns/blendcube/config"
-
 	"github.com/qmuntal/gltf"
 	"github.com/qmuntal/gltf/unlit"
 	"github.com/westphae/quaternion"

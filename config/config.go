@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/Songmu/replaceablewriter"
-
 	"github.com/go-chi/chi/middleware"
 )
 
@@ -50,9 +49,9 @@ func (c *Config) GetPort() string {
 // Configure parse config file and environment variable
 func Configure(exit chan int) error {
 	configPath := flag.String(
-		"conf",
+		"config",
 		"./config.json",
-		"config file",
+		"config filepath",
 	)
 	flag.Parse()
 
