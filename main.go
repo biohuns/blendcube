@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/biohuns/blendcube/config"
@@ -10,28 +9,21 @@ import (
 	"github.com/biohuns/blendcube/handler"
 )
 
-func main() {
-	exit := make(chan int)
+var exit = make(chan int)
 
+func start() {
 	if err := config.Configure(exit); err != nil {
-		log.Println(err)
-		os.Exit(1)
+		log.Fatalln(err)
 	}
 	log.Println("server configure: success")
 
 	if err := cube.Initialize(); err != nil {
-		log.Println(err)
-		os.Exit(1)
+		log.Fatalln(err)
 	}
 	log.Println("loading model: success")
 
-	srv := &http.Server{
-		Addr:    config.Shared.GetPort(),
-		Handler: handler.New(),
-	}
-
 	go func() {
-		if err := srv.ListenAndServe(); err != nil {
+		if err := handler.NewServer().ListenAndServe(); err != nil {
 			log.Println(err)
 			exit <- 1
 		}
@@ -39,4 +31,8 @@ func main() {
 
 	exitCode := <-exit
 	os.Exit(exitCode)
+}
+
+func main() {
+	start()
 }

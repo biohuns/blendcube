@@ -4,11 +4,10 @@
     "timeout":30
   },
   "log":{
-    "output":"stdout",
     "file_path":""
   },
   "model":{
-    "file_path":"./cube.gltf",
-    "binary_file_path":"./cube.glb"
+    "file_path":"./model/cube.gltf",
+    "binary_file_path":"./model/cube.glb"
   }
 }

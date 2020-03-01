@@ -16,37 +16,29 @@ import (
 	"github.com/go-chi/chi/middleware"
 )
 
-type (
-	// Config is app configuration
-	Config struct {
-		Server struct {
-			Port    int           `json:"port"`
-			Timeout time.Duration `json:"timeout"`
-		} `json:"server"`
-		Log struct {
-			Output   string `json:"output"`
-			FilePath string `json:"file_path"`
-		} `json:"log"`
-		Model struct {
-			FilePath       string `json:"file_path"`
-			BinaryFilePath string `json:"binary_file_path"`
-		} `json:"model"`
-	}
-)
+type Config struct {
+	Server struct {
+		Port    int           `json:"port"`
+		Timeout time.Duration `json:"timeout"`
+	} `json:"server"`
+	Log struct {
+		FilePath string `json:"file_path"`
+	} `json:"log"`
+	Model struct {
+		FilePath       string `json:"file_path"`
+		BinaryFilePath string `json:"binary_file_path"`
+	} `json:"model"`
+}
 
 var (
-	// Shared holds config instance
-	Shared = new(Config)
-
+	Shared  = new(Config)
 	logFile *replaceablewriter.Writer
 )
 
-// GetPort return port string
 func (c *Config) GetPort() string {
 	return ":" + strconv.Itoa(c.Server.Port)
 }
 
-// Configure parse config file and environment variable
 func Configure(exit chan int) error {
 	configPath := flag.String(
 		"config",
@@ -71,7 +63,7 @@ func Configure(exit chan int) error {
 }
 
 func configureLogger() error {
-	if Shared.Log.Output == "file" {
+	if Shared.Log.FilePath != "" {
 		var err error
 		logFile, err = openLogFile()
 		if err != nil {
