@@ -1,3 +1,6 @@
+%define debug_package %{nil}
+%define __jar_repack %{nil}
+
 Name: blendcube
 Version: 0.4.0
 Release: 1
@@ -12,17 +15,12 @@ BuildRequires: make
 %description
 Simple API Server for Generating Rubik's Cube 3D Model from URL
 
-%prep
-rm -rf %{buildroot}
-
-%build
-
 %install
-ls -la /github/home/rpmbuild/
-ls -la /github/home/rpmbuild/BUILD/
+find /github/
 install -D %{name} %{buildroot}%{_bindir}/%{name}
-install -D config.json.example %{buildroot}%{_sysconfdir}/%{name}/config.json
-install -D model/* %{buildroot}%{_sysconfdir}/%{name}/model/
+install -D config.json %{buildroot}%{_sysconfdir}/%{name}/config.json
+install -D model/cube.gltf %{buildroot}%{_sysconfdir}/%{name}/model/cube.gltf
+install -D model/cube.glb %{buildroot}%{_sysconfdir}/%{name}/model/cube.glb
 install -d %{buildroot}/var/log/%{name}
 
 %files

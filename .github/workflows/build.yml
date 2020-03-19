@@ -23,8 +23,5 @@ jobs:
     - name: Build binary
       run: make build
 
-    - name: ls
-      run: ls -la BUILD
-
     - name: Build RPM
       uses: ./.github/actions/rpmbuild
