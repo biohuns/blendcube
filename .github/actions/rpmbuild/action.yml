@@ -1,0 +1,5 @@
+name: 'Build RPM Action'
+description: 'Build RPM Action'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

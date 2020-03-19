@@ -1,5 +1,4 @@
-/blendcube
-/blendcube.exe
+/BUILD/blendcube
 /config.json
 *.blend1
 *.blend2

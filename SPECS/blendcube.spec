@@ -1,18 +1,13 @@
-%define name        blendcube
-%define version     0.4.0
-%define release     1
-%define buildroot   %{_topdir}
-
-Name: %{name}
-Version: %{version}
-Release: %{release}
+Name: blendcube
+Version: 0.4.0
+Release: 1
 Summary: Simple API Server for Generating Rubik's Cube 3D Model from URL
 License: MIT
 Group: Development/Tools
 URL: https://github.com/biohuns/blendcube
 Source: https://codeload.github.com/biohuns/blendcube/tar.gz/v0.3.0
-BuildRoot: %{buildroot}
-BuildRequires: make go
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRequires: make
 
 %description
 Simple API Server for Generating Rubik's Cube 3D Model from URL
@@ -21,17 +16,22 @@ Simple API Server for Generating Rubik's Cube 3D Model from URL
 rm -rf %{buildroot}
 
 %build
-make
 
 %install
-cp %{name} %{buildroot}/usr/bin/%{name}
-cp config.json %{buildroot}/etc/%{name}/config.json
+ls -la /github/home/rpmbuild/
+ls -la /github/home/rpmbuild/BUILD/
+install -D %{name} %{buildroot}%{_bindir}/%{name}
+install -D config.json.example %{buildroot}%{_sysconfdir}/%{name}/config.json
+install -D model/* %{buildroot}%{_sysconfdir}/%{name}/model/
+install -d %{buildroot}/var/log/%{name}
 
 %files
 %defattr(0755,root,root)
-/usr/bin/%{name}
+%{_bindir}/%{name}
+%config(noreplace) %{_sysconfdir}/%{name}/config.json
+%config(noreplace) %{_sysconfdir}/%{name}/cube.gltf
+%config(noreplace) %{_sysconfdir}/%{name}/cube.glb
+/var/log/%{name}
 
-%config
-%config(noreplace) /etc/%{name}/config.json
-%config(noreplace) /etc/%{name}/cube.gltf
-%config(noreplace) /etc/%{name}/cube.glb
+%clean
+rm -rf %{buildroot}

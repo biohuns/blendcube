@@ -4,16 +4,12 @@ default: build
 
 .PHONY: build
 build:
-	go build -o $(APP_NAME)
+	go build -o BUILD/$(APP_NAME)
 
 .PHONY: run
 run: build
-	./$(APP_NAME)
-
-.PHONY: mod-tidy
-mod-tidy:
-	go mod tidy
+	./BUILD/$(APP_NAME)
 
 .PHONY: clean
 clean:
-	rm -f $(APP_NAME)
+	rm -f BUILD/$(APP_NAME)
