@@ -1,13 +1,13 @@
 {
-  "server":{
-    "port":8888,
-    "timeout":30
+  "server": {
+    "port": 8888,
+    "timeout": 30
   },
-  "log":{
-    "file_path":""
+  "log": {
+    "file_path": ""
   },
-  "model":{
-    "file_path":"./model/cube.gltf",
-    "binary_file_path":"./model/cube.glb"
+  "model": {
+    "file_path": "./model/cube.gltf",
+    "binary_file_path": "./model/cube.glb"
   }
 }
