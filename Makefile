@@ -4,19 +4,11 @@ default: build
 
 .PHONY: build
 build:
-ifeq ($(OS),Windows_NT)
-	@go build -o $(APP_NAME).exe
-else
-	@go build -o $(APP_NAME)
-endif
+	go build -o $(APP_NAME)
 
 .PHONY: run
 run: build
-ifeq ($(OS),Windows_NT)
-	@./$(APP_NAME).exe
-else
-	@./$(APP_NAME)
-endif
+	./$(APP_NAME)
 
 .PHONY: mod-tidy
 mod-tidy:
@@ -24,4 +16,4 @@ mod-tidy:
 
 .PHONY: clean
 clean:
-	go clean -x
+	rm -f $(APP_NAME)
