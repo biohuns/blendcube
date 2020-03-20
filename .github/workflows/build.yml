@@ -10,36 +10,52 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      APP: blendcube
     steps:
 
-    - name: Set up Go
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.14
-      id: go
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.14
 
-    - name: Check out
-      uses: actions/checkout@v1
+      - name: Check out
+        uses: actions/checkout@v1
 
-    - name: Build binary
-      run: make build
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d'/' -f3)
 
-    - name: Make Config
-      run: |
-        cat config.json.example |\
-          jq '.log.file_path="/var/log/blendcube/blendcube.log"' |\
-          jq '.model.file_path="/etc/blendcube/model/cube.gltf"' |\
-          jq '.model.binary_file_path="/etc/blendcube/model/cube.glb"' \
-          > config.json
+      - name: Build binary
+        run: make build
 
-    - name: Archive Source
-      run: |
-        mkdir -p ${{ github.ref }} SOURCES
-        cp blendcube        ${{ github.ref }}/
-        cp config.json      ${{ github.ref }}/
-        cp model/cube.gltf  ${{ github.ref }}/
-        cp model/cube.glb   ${{ github.ref }}/
-        tar czf SOURCES/blendcube-${{ github.ref }}.tar.gz ${{ github.ref }}/
+      - name: Make Config
+        run: |
+          cat config.json.example |\
+            jq '.log.file_path="/var/log/${{ env.APP }}/${{ env.APP }}.log"' |\
+            jq '.model.file_path="/etc/${{ env.APP }}/cube.gltf"' |\
+            jq '.model.binary_file_path="/etc/${{ env.APP }}/cube.glb"' \
+            > config.json
 
-    - name: Build RPM
-      uses: ./.github/actions/rpmbuild
+      - name: Archive Source
+        run: |
+          mkdir -p ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }} SOURCES
+          cp ${{ env.APP }} \
+            config.json \
+            config/cube.gltf \
+            config/cube.glb \
+            config/service \
+            config/logrotate \
+            ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}/
+          tar czf \
+            SOURCES/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}.tar.gz \
+            ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}/
+
+      - name: Build RPM
+        uses: ./.github/actions/rpmbuild
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
+          path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm

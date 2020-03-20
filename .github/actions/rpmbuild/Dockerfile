@@ -8,4 +8,7 @@ RUN yum install -y rpmdevtools yum-utils spectool && \
 
 CMD spectool --get-files --all SPECS/*.spec && \
     yum-builddep --assumeyes SPECS/*.spec && \
-    rpmbuild --define '_topdir /github/workspace' -ba SPECS/*.spec
+    rpmbuild \
+        --define '_topdir  /github/workspace' \
+        --define "_version $(echo $GITHUB_REF | rev | cut -d '/' -f1 | rev)" \
+        -ba SPECS/*.spec

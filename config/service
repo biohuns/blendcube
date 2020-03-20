@@ -1,0 +1,12 @@
+[Unit]
+Description = BlendCube
+
+[Service]
+Type = simple
+ExecStart = /usr/local/bin/blendcube -config /etc/blendcube/config.json
+ExecStop = /bin/kill -HUP $MAINPID
+ExecReload = /bin/kill -HUP $MAINPID && /usr/local/bin/blendcube
+Restart = always
+
+[Install]
+WantedBy = multi-user.target
