@@ -3,9 +3,9 @@ Description = BlendCube
 
 [Service]
 Type = simple
-ExecStart = /usr/local/bin/blendcube -config /etc/blendcube/config.json
+ExecStart = /usr/bin/blendcube -config /etc/blendcube/config.json
 ExecStop = /bin/kill -HUP $MAINPID
-ExecReload = /bin/kill -HUP $MAINPID && /usr/local/bin/blendcube
+ExecReload = /bin/kill -HUP $MAINPID && /usr/bin/blendcube
 Restart = always
 
 [Install]
