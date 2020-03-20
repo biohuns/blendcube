@@ -26,7 +26,7 @@ install -D %{name} %{buildroot}%{_bindir}/%{name}
 install -D config.json %{buildroot}%{_sysconfdir}/%{name}/config.json
 install -D cube.gltf %{buildroot}%{_sysconfdir}/%{name}/cube.gltf
 install -D cube.glb %{buildroot}%{_sysconfdir}/%{name}/cube.glb
-install -D service %{buildroot}/etc/systemd/system/%{name}.service
+install -D service %{buildroot}/etc/systemd/system/multi-user.target.wants/%{name}.service
 install -D logrotate %{buildroot}/etc/logrotate.d/%{name}
 install -d %{buildroot}/var/log/%{name}
 
@@ -36,7 +36,7 @@ install -d %{buildroot}/var/log/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/config.json
 %config(noreplace) %{_sysconfdir}/%{name}/cube.gltf
 %config(noreplace) %{_sysconfdir}/%{name}/cube.glb
-%config(noreplace) %{_sysconfdir}/systemd/system/%{name}.service
+%config(noreplace) %attr(0777,root,root) %{_sysconfdir}/systemd/system/multi-user.target.wants/%{name}.service
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 /var/log/%{name}
 

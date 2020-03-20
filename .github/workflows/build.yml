@@ -59,3 +59,23 @@ jobs:
         with:
           name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
           path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
+
+      - name: Create Release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ steps.get_version.outputs.VERSION }}
+          draft: true
+          prerelease: true
+        id: create_release
+
+      - uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
+          asset_name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
+          asset_content_type: application/x-redhat-package-manager
