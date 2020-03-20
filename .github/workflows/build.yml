@@ -2,7 +2,8 @@ name: Build
 
 on:
   push:
-    branches: [ master ]
+    tags:
+      - "*"
 
 jobs:
 
@@ -33,12 +34,12 @@ jobs:
 
     - name: Archive Source
       run: |
-        mkdir -p dist
-        cp blendcube dist/
-        cp config.json dist/
-        cp model/cube.gltf dist/
-        cp model/cube.glb dist/
-        tar czf dist.tar.gz dist/
+        mkdir -p ${{ github.ref }} SOURCES
+        cp blendcube        ${{ github.ref }}/
+        cp config.json      ${{ github.ref }}/
+        cp model/cube.gltf  ${{ github.ref }}/
+        cp model/cube.glb   ${{ github.ref }}/
+        tar czf SOURCES/blendcube-${{ github.ref }}.tar.gz ${{ github.ref }}/
 
     - name: Build RPM
       uses: ./.github/actions/rpmbuild
