@@ -31,7 +31,7 @@ jobs:
       - name: Build binary
         run: make build
 
-      - name: Make Config
+      - name: Create config.json
         run: |
           cat config.json.example |\
             jq '.log.file_path="/var/log/${{ env.APP }}/${{ env.APP }}.log"' |\
@@ -39,7 +39,7 @@ jobs:
             jq '.model.binary_file_path="/etc/${{ env.APP }}/cube.glb"' \
             > config.json
 
-      - name: Archive Source
+      - name: Archive source
         run: |
           mkdir -p ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }} SOURCES
           cp ${{ env.APP }} \
@@ -56,14 +56,14 @@ jobs:
       - name: Build RPM
         uses: ./.github/actions/rpmbuild
 
-      - name: Upload Artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v1
         if: "!startsWith(github.ref, 'refs/tags/')"
         with:
           name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
           path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
 
-      - name: Create Release
+      - name: Create release
         uses: actions/create-release@master
         if: startsWith(github.ref, 'refs/tags/')
         env:
@@ -74,7 +74,7 @@ jobs:
           draft: true
         id: create_release
 
-      - name: Upload Artifact to Release
+      - name: Upload artifact to release
         uses: actions/upload-release-asset@master
         if: startsWith(github.ref, 'refs/tags/')
         env:
