@@ -1,5 +1,7 @@
 # BlendCube
 
+![](https://img.shields.io/github/v/release/biohuns/blendcube.svg) ![](https://github.com/biohuns/blendcube/workflows/Build/badge.svg)
+
 Simple API Server for Generating Rubik's Cube 3D Model from URL
 
 ## Usage
