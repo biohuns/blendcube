@@ -60,8 +60,8 @@ jobs:
         uses: actions/upload-artifact@v1
         if: "!startsWith(github.ref, 'refs/tags/')"
         with:
-          name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
-          path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
+          name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
+          path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
 
       - name: Create release
         uses: actions/create-release@master
@@ -81,6 +81,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
-          asset_name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
+          asset_path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
+          asset_name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
           asset_content_type: application/x-redhat-package-manager
