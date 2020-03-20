@@ -23,5 +23,22 @@ jobs:
     - name: Build binary
       run: make build
 
+    - name: Make Config
+      run: |
+        cat config.json.example |\
+          jq '.log.file_path="/var/log/blendcube/blendcube.log"' |\
+          jq '.model.file_path="/etc/blendcube/model/cube.gltf"' |\
+          jq '.model.binary_file_path="/etc/blendcube/model/cube.glb"' \
+          > config.json
+
+    - name: Archive Source
+      run: |
+        mkdir -p dist
+        cp blendcube dist/
+        cp config.json dist/
+        cp model/cube.gltf dist/
+        cp model/cube.glb dist/
+        tar czf dist.tar.gz dist/
+
     - name: Build RPM
       uses: ./.github/actions/rpmbuild
