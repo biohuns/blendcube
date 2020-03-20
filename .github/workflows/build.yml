@@ -2,6 +2,8 @@ name: Build
 
 on:
   push:
+    branches:
+      - "*"
     tags:
       - "*"
 
@@ -56,12 +58,14 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
+        if: "!startsWith(github.ref, 'refs/tags/')"
         with:
           name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
           path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.x86_64.rpm
 
       - name: Create Release
         uses: actions/create-release@master
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -72,6 +76,7 @@ jobs:
 
       - name: Upload Artifact to Release
         uses: actions/upload-release-asset@master
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

@@ -2,16 +2,15 @@
 
 Name: blendcube
 Version: %{_version}
-Release: 1
+Release: 1%{?_dist}
 
-Summary: Simple API Server for Generating Rubik's Cube 3D Model from URL
+Summary: Rubik's Cube 3D Model Server
 License: MIT
-Group: Development/Tools
+Group: Applications/Internet
 URL: https://github.com/biohuns/blendcube
 
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: make
 
 %description
 Simple API Server for Generating Rubik's Cube 3D Model from URL
@@ -36,7 +35,7 @@ install -d %{buildroot}/var/log/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/config.json
 %config(noreplace) %{_sysconfdir}/%{name}/cube.gltf
 %config(noreplace) %{_sysconfdir}/%{name}/cube.glb
-%config(noreplace) %attr(0777,root,root) %{_sysconfdir}/systemd/system/%{name}.service
+%config(noreplace) %{_sysconfdir}/systemd/system/%{name}.service
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 /var/log/%{name}
 

@@ -11,4 +11,5 @@ CMD spectool --get-files --all SPECS/*.spec && \
     rpmbuild \
         --define '_topdir /github/workspace' \
         --define "_version $(echo $GITHUB_REF | cut -d'/' -f3)" \
+        --define "_dist .el7" \
         -ba SPECS/*.spec
