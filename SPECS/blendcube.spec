@@ -2,7 +2,7 @@
 
 Name: blendcube
 Version: %{_version}
-Release: 1%{?_dist}
+Release: %{_release}%{?_dist}
 
 Summary: Rubik's Cube 3D Model Server
 License: MIT

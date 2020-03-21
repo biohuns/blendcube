@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: Build
+    name: Build and Deploy RPM
     runs-on: ubuntu-latest
     env:
       APP: blendcube
@@ -24,12 +24,14 @@ jobs:
       - name: Check out
         uses: actions/checkout@v1
 
-      - name: Get version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d'/' -f3)
+      - name: Get latest tag
+        id: tag
+        run: echo ::set-output name=VERSION::$(git describe --tags --abbrev=0)
 
       - name: Build binary
-        run: make build
+        run: |
+          export PATH=$(go env GOPATH)/bin:$PATH
+          make build
 
       - name: Create config.json
         run: |
@@ -41,46 +43,34 @@ jobs:
 
       - name: Archive source
         run: |
-          mkdir -p ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }} SOURCES
+          mkdir -p ${{ env.APP }}-${{ steps.tag.outputs.VERSION }} SOURCES
           cp ${{ env.APP }} \
             config.json \
             config/cube.gltf \
             config/cube.glb \
             config/service \
             config/logrotate \
-            ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}/
+            ${{ env.APP }}-${{ steps.tag.outputs.VERSION }}/
           tar czf \
-            SOURCES/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}.tar.gz \
-            ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}/
+            SOURCES/${{ env.APP }}-${{ steps.tag.outputs.VERSION }}.tar.gz \
+            ${{ env.APP }}-${{ steps.tag.outputs.VERSION }}
 
       - name: Build RPM
         uses: ./.github/actions/rpmbuild
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v1
-        if: "!startsWith(github.ref, 'refs/tags/')"
-        with:
-          name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
-          path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
-
-      - name: Create release
-        uses: actions/create-release@master
-        if: startsWith(github.ref, 'refs/tags/')
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ steps.get_version.outputs.VERSION }}
-          draft: true
-        id: create_release
+          VERSION: ${{ steps.tag.outputs.VERSION }}
+          RELEASE: ${{ github.run_number }}
 
-      - name: Upload artifact to release
-        uses: actions/upload-release-asset@master
-        if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2.0.1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./RPMS/x86_64/${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
-          asset_name: ${{ env.APP }}-${{ steps.get_version.outputs.VERSION }}-1.el7.x86_64.rpm
-          asset_content_type: application/x-redhat-package-manager
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.KNOWN_HOSTS }}
+          config: ${{ secrets.SSH_CONFIG }}
+
+      - name: Deploy RPM
+        env:
+          RPM: ${{ env.APP }}-${{ steps.tag.outputs.VERSION }}-${{ github.run_number }}.el7.x86_64.rpm
+        run: |
+          scp ./RPMS/x86_64/$RPM remote:/var/tmp/$RPM
+          ssh remote "sudo yum install -y /var/tmp/$RPM"
