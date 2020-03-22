@@ -2,8 +2,6 @@ name: Build and Deploy
 
 on:
   push:
-    branches:
-      - "*"
     tags:
       - "*"
 
@@ -56,7 +54,7 @@ jobs:
             ${{ env.APP }}-${{ steps.tag.outputs.VERSION }}
 
       - name: Build RPM
-        uses: ./.github/actions/rpmbuild
+        uses: biohuns/rpmbuild-centos8-action@v1.0.0
         env:
           VERSION: ${{ steps.tag.outputs.VERSION }}
           RELEASE: ${{ github.run_number }}
@@ -70,7 +68,7 @@ jobs:
 
       - name: Deploy RPM
         env:
-          RPM: ${{ env.APP }}-${{ steps.tag.outputs.VERSION }}-${{ github.run_number }}.el7.x86_64.rpm
+          RPM: ${{ env.APP }}-${{ steps.tag.outputs.VERSION }}-${{ github.run_number }}.el8.x86_64.rpm
         run: |
           scp ./RPMS/x86_64/$RPM remote:/var/tmp/$RPM
           ssh remote "sudo yum install -y /var/tmp/$RPM"
