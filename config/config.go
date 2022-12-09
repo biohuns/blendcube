@@ -54,7 +54,7 @@ func Configure(exit chan int) error {
 	if err := json.Unmarshal(b, Shared); err != nil {
 		return err
 	}
-	if err := configureLogger(); err != nil {
+	if err := configureLogger(exit); err != nil {
 		return err
 	}
 	configureReopenLogFile(exit)
@@ -62,7 +62,7 @@ func Configure(exit chan int) error {
 	return nil
 }
 
-func configureLogger() error {
+func configureLogger(exit chan int) error {
 	if Shared.Log.FilePath != "" {
 		var err error
 		logFile, err = openLogFile()
@@ -75,6 +75,8 @@ func configureLogger() error {
 				NoColor: true,
 			},
 		)
+
+		configureLogger(exit)
 	}
 
 	return nil
